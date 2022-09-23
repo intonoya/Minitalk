@@ -1,29 +1,34 @@
-NAME = minitalk.a
+SOURCES = ft_server.c ft_client.c
 
-LIBFT = libft/libft.a
+OBJECTS = $(SOURCES:.c=.o)
 
-SOURSES	= $(wildcard *.c)
+CC = gcc
 
-OBJECTS = $(SOURSES:.c=.o)
+CFLAGS = -Wall -Wextra -Werror
 
-CC	= gcc
+all: ft_server ft_client
 
-FLAGS	= -c -Wall -Werror -Wextra
+bonus: ft_server ft_client
 
-$(NAME): $(OBJECTS)
-		$(MAKE) -C libft
-		cp libft/libft.a $(NAME)
-		$(CC) $(FLAGS) $(SOURSES)
-		ar -rcs $(NAME) $(OBJECTS)
+ft_server: ft_server.o libft
+	$(CC) -o $@ $< -Llibft -lft
 
-all:	$(NAME)
+ft_client: ft_client.o libft
+	$(CC) -o $@ $< -Llibft -lft
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $?
+
+libft:
+	make -C libft
 
 clean:
-		$(MAKE) clean -C libft
-		rm -rf $(OBJECTS)
+	rm -f $(OBJECTS)
+	make -C libft clean
+	
+fclean: clean
+	rm -f ft_server ft_client libft/libft.a
 
-fclean:	clean
-		$(MAKE) fclean -C libft
-		rm -rf $(OBJECTS)
+re: fclean all
 
-re:	fclean all
+.PHONY: all bonus libft clean fclean re
