@@ -6,7 +6,7 @@
 /*   By: intonoya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 15:50:33 by intonoya          #+#    #+#             */
-/*   Updated: 2022/09/27 16:10:53 by intonoya         ###   ########.fr       */
+/*   Updated: 2022/09/28 16:55:32 by intonoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	ft_kill(int pid, char *str)
 			else
 				kill(pid, SIGUSR1);
 			usleep(100);
-		}
+		}	
 	}
 	i = 8;
 	while (i--)
@@ -57,6 +57,8 @@ static void	ft_kill(int pid, char *str)
 
 int	main(int argc, char **argv)
 {
+	char	*tmp;
+
 	if (argc != 3 || !ft_strlen(argv[2]))
 		return (1);
 	ft_putstr_fd("Sent: ", 1);
@@ -65,8 +67,10 @@ int	main(int argc, char **argv)
 	ft_putstr_fd("Received: ", 1);
 	signal(SIGUSR1, ft_action);
 	signal(SIGUSR2, ft_action);
-	ft_kill(ft_atoi(argv[1]), argv[2]);
+	tmp = ft_strjoin(argv[2], "\n");
+	ft_kill(ft_atoi(argv[1]), tmp);
 	while (1)
 		pause();
+	free(tmp);
 	return (0);
 }
